@@ -1,0 +1,11 @@
+name = RSS Show module
+description = Module description.
+package = MyMod
+core = 7.x
+files[] = rssmodule.module
+
+; Information added by Drupal.org packaging script on 2014-01-15
+version = "7.26"
+project = "DrupalMod"
+datestamp = "1391887714"
+
