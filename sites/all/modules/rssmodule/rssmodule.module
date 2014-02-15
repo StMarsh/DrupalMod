@@ -19,16 +19,16 @@ function rssmodule_block_view($delta = ''){
     switch ($delta){
         case 'rssblock':
             $block['subject'] = load_rss('title');
-            $block['content'] = rssblock_view();
+            $block['content'] = rssblock_view(10);
             break;
     }
     return $block;
 }
 
-function rssblock_view(){
+function rssblock_view($j){
     $res = load_rss();
 
-    for ($i = 0; $i < 10; $i++) {
+    for ($i = 0; $i < $j; $i++) {
         $item[] = array(
             'title' => $res[$i]->title,
             'link' => $res[$i]->link,
@@ -46,4 +46,52 @@ function rssmodule_theme(){
             'variables' => array ('item' => array()),
         )
     );
+}
+
+function rssmodule_menu(){
+    $menu['rss/%rss'] = array(
+        'title callback' => 'rss_title_callback',
+        'title arguments' => array(1),
+        'page callback' => 'rss_page',
+        'page arguments' => array(1),
+        'access callback' => 'access_rss'
+    );
+    $menu['rss'] = array(
+        'page callback' => 'rss_p',
+        'access callback' => 'access_rss'
+    );
+    return $menu;
+}
+
+function rss_load($param){
+    $res = load_rss();
+    $content = $res[$param-1];
+    if (!$content || $param == 0){
+        return false;
+    }
+    else {
+        return $content;
+    }
+}
+
+function rss_title_callback($param){
+
+    return "$param->title";
+}
+
+function rss_page($param){
+    return "<pre>$param->description</pre>";
+}
+
+function access_rss(){
+    return true;
+}
+
+function rss_p(){
+    $res = load_rss();
+    $i = 1;
+    while ($content = $res[$i]) {
+        $i++;
+    }
+    return rssblock_view($i);
 }
