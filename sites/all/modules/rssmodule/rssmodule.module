@@ -9,7 +9,7 @@ function rssmodule_block_info(){
 }
 
 function load_rss($result = 'item'){
-    $rss_url = "http://partners.userland.com/nytRss/nytHomepage.xml";
+    $rss_url = variable_get('url_rss');
     $rss= simplexml_load_file($rss_url);
     $data =  $rss->channel->$result;
     return $data;
@@ -60,6 +60,14 @@ function rssmodule_menu(){
         'page callback' => 'rss_p',
         'access callback' => 'access_rss'
     );
+    $menu['admin/settings/url_rss'] = array(
+        'title'=>'RSS module settings',
+        'description' => 'Description of your RSS settings page',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('rssmodule_admin'),
+        'access arguments' => array('administer rssmodule settings'),
+        'type' => MENU_NORMAL_ITEM,
+    );
     return $menu;
 }
 
@@ -95,3 +103,20 @@ function rss_p(){
     }
     return rssblock_view($i);
 }
+
+/*********Настройки модуля************/
+
+function rssmodule_admin(){
+    $form = array();
+    $form['url_rss'] = array(
+        '#type'=>'textfield',
+        '#title'=>t('URL of RSS'),
+        '#default_value'=>variable_get('url_rss','http://partners.userland.com/nytRss/nytHomepage.xml'),
+        '#size'=>100,
+        '#maxlength'=>255,
+        '#description'=>t("Type your RRS feed"),
+        '#required'=>TRUE,
+    );
+    return system_settings_form($form);
+}
+

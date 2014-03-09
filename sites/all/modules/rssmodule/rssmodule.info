@@ -6,6 +6,7 @@ files[] = rssmodule.module
 
 ; Information added by Drupal.org packaging script on 2014-01-15
 version = "7.26"
+configure = admin/settings/url_rss
 project = "DrupalMod"
 datestamp = "1391887714"
 
